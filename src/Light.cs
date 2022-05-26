@@ -13,5 +13,12 @@ namespace Template {
 
         public Vector3 Location { get { return location; } }
         public Color Intensity { get { return intensity; } }
+
+        internal void Debug(RayTracer rayTracer)
+        {
+            int x = rayTracer.SceneToScreenX(location.X);
+            int y = rayTracer.SceneToScreenX(location.Z);
+            rayTracer.screen.Box(x-1, y-1, x, y, intensity.value);
+        }
     }
 }

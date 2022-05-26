@@ -1,41 +1,58 @@
-﻿using OpenTK;
+﻿using System;
+using OpenTK;
 namespace Template{
     class Camera {
-        public Vector3 position, lookAt, upDirection, rightDirection;
-        private Vector3 topLeft, topRight, bottomLeft, bottomRight;
+        private Vector3 position, lookAt, upDirection, rightDirection;
+        public Vector3 topLeft, topRight, bottomLeft, bottomRight;
         private Vector3 u, v;
         private float distance, ratio;
 
-
-        public Camera()
+        public float FOV { set { this.distance = this.ratio / (float)Math.Tan(value / 360f * Math.PI);} }
+        public Vector3 Position { 
+            get { return position; } 
+            set { 
+                position = value;
+                this.rightDirection = Vector3.Cross(this.upDirection, this.lookAt);
+                UpdateScreen();
+            } 
+        }
+        public Vector3 LookAt
         {
-            this.position = new Vector3(0, 8, -35);
-            this.lookAt = new Vector3(0, -2, 10).Normalized();
-            this.upDirection = Vector3.UnitY;
-            this.rightDirection = Vector3.Cross(this.lookAt, this.upDirection);
-            this.distance = 4f;
+            get { return lookAt; }
+            set
+            {
+                lookAt = value;
+                this.rightDirection = Vector3.Cross(this.upDirection, this.lookAt);
+                UpdateScreen();
+            }
+        }
+        public Camera(Vector3 position, Vector3 lookAt, Vector3 upDirection, float fov = 90f)
+        {
+            this.position = position;
+            this.lookAt = lookAt.Normalized();
+            this.upDirection = upDirection.Normalized();
+            this.rightDirection = Vector3.Cross(this.upDirection, this.lookAt);
             this.ratio = 1f;
+            FOV = fov;
 
+            UpdateScreen();
+        }
 
+        public void UpdateScreen()
+        {
             Vector3 center = position + distance * lookAt;
             this.topLeft = center + upDirection - ratio * rightDirection;
             this.topRight = center + upDirection + ratio * rightDirection;
             this.bottomLeft = center - upDirection - ratio * rightDirection;
             this.bottomRight = center - upDirection + ratio * rightDirection;
 
-            this.u = topLeft - topRight;
-            this.v = bottomRight - topRight;
-        }
-        public Camera(Vector3 position, Vector3 lookAt, Vector3 upDirection)
-        {
-            this.position = position;
-            this.lookAt = lookAt;
-            this.upDirection = upDirection;
+            this.u = topRight - topLeft;
+            this.v = bottomLeft - topLeft;
         }
 
-        public Ray ray(float a, float b)
+        public Ray Ray(float a, float b)
         {
-            return new Ray(this.position, this.topRight + a * u + b * v - this.position);
+            return new Ray(this.position, this.topLeft + a * u + b * v - this.position);
         }
     }
 }

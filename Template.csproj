@@ -49,15 +49,22 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\AABB.cs" />
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\Color.cs" />
+    <Compile Include="src\FpsMonitor.cs" />
     <Compile Include="src\Intersection.cs" />
     <Compile Include="src\Light.cs" />
-    <Compile Include="src\Primitive.cs" />
+    <Compile Include="src\Material\Image.cs" />
+    <Compile Include="src\Material\Material.cs" />
+    <Compile Include="src\Material\Plain.cs" />
+    <Compile Include="src\Material\Texture.cs" />
+    <Compile Include="src\Primitives\Plane.cs" />
+    <Compile Include="src\Primitives\Primitive.cs" />
+    <Compile Include="src\Primitives\Sphere.cs" />
     <Compile Include="src\Ray.cs" />
     <Compile Include="src\RayTracer.cs" />
     <Compile Include="src\Scene.cs" />
-    <Compile Include="src\Sphere.cs" />
     <Compile Include="src\Triangle.cs" />
     <Compile Include="surface.cs" />
     <Compile Include="template.cs" />
