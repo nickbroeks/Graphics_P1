@@ -20,7 +20,7 @@ namespace Template {
                 new Vector3(1f, 4f, 5f),
                 new Vector3(2, -3, -3),
                 Vector3.UnitY, 80f);
-            screen = new Surface(1920, 1080);
+            screen = new Surface(800, 400);
             
             fpsm = new FpsMonitor();
             time = 1.4f;
