@@ -17,7 +17,9 @@ namespace Template {
             for (int i = 0; i < 3; i++) {
                 float t1 = (min[i] - ray.origin[i]) / ray.direction[i];
                 float t2 = (max[i] - ray.origin[i]) / ray.direction[i];
-                if (t1 > t2) { float temp = t1; t1 = t2; t2 = temp; }
+                if (t1 > t2) {
+                    (t2, t1) = (t1, t2);
+                }
                 tmin = Math.Max(tmin, t1);
                 tmax = Math.Min(tmax, t2);
             }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using OpenTK;
 
 namespace Template {
@@ -39,7 +38,7 @@ namespace Template {
             //lights.Add(new Light(new Vector3(9f, 4f, 9f), new Color(255, 0, 0)));
             //lights.Add(new Light(new Vector3(1f, 4f, 9f), new Color(0, 255, 0)));
             //lights.Add(new Light(new Vector3(5f, 4f, 1f), new Color(0, 0, 255)));
-            objects.Add(new Triangle(new Vector3(4, -2, 4), new Vector3(6, 0, 4), new Vector3(5, 1, 5), Material.SmallChecker));
+            objects.Add(new Triangle(new Vector3(4, -2, 4), new Vector3(6, 0, 4), new Vector3(5, 1, 5), Material.Metal));
             lights.Add(new Light(new Vector3(5f, 5f, 0f), new Color(255)));
             ambient = new Color(60, 60, 60);
         }

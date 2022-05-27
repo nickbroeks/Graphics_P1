@@ -1,5 +1,6 @@
 ﻿using System;
 using OpenTK;
+
 namespace Template{
     class Camera {
         private Vector3 position, lookAt, upDirection, rightDirection;
