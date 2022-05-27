@@ -5,7 +5,7 @@ namespace Template {
     class FpsMonitor {
         public float value;
         public TimeSpan sample;
-        private Stopwatch sw;
+        private readonly Stopwatch sw;
         public int frames;
         public FpsMonitor()
         {

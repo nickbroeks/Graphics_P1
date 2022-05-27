@@ -9,8 +9,8 @@ namespace Template {
         public Camera camera;
         public Scene scene;
         public float time;
-        private FpsMonitor fpsm;
-        private bool multithread, rotate;
+        private readonly FpsMonitor fpsm;
+        private readonly bool multithread, rotate;
 
         public RayTracer()
         { 
@@ -58,7 +58,7 @@ namespace Template {
             screen.Clear(0);
             if (rotate) {
                 time += 0.04f;
-                camera.Position = 4.9f * new Vector3(-(float)Math.Cos(time), 0, -(float)Math.Sin(time)) + new Vector3(5, 0, 5);
+                camera.Position = 6f * new Vector3(-(float)Math.Cos(time), 0, -(float)Math.Sin(time)) + new Vector3(5, 0, 5);
                 camera.LookAt = new Vector3((float)Math.Cos(time), 0, (float)Math.Sin(time));
             }
             
@@ -70,10 +70,13 @@ namespace Template {
         {
             float cameraY = (float)y / screen.height;
             for (int x = 0; x < screen.width / 2; x++) {
-                float cameraX = (float)x / screen.width * 2;
-                Ray ray = camera.Ray(cameraX, cameraY);
                 bool debug = y == screen.height / 2 && x % 10 == 0;
-                Color color = Trace(ray, debug, 5);
+
+                float cameraX = (float)x / screen.width * 2;
+                Ray ray = camera.Ray(cameraX, cameraY);//TODO Instead of making 1 ray, make 9
+
+                Color color = Trace(ray, debug, 5); //TODO Calulate 9 colors
+                //TODO Color color = average of 9 colors
                 screen.Plot(x + screen.width / 2, y, color.value);
             }
         }

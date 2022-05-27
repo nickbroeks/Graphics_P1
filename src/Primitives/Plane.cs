@@ -5,7 +5,7 @@ namespace Template {
     class Plane : Primitive {
 
         private Vector3 normal;
-        private float distance;
+        private readonly float distance;
         private Vector3 origin;
         private Vector3 u, v;
 

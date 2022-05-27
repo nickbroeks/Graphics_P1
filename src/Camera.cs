@@ -6,7 +6,8 @@ namespace Template{
         private Vector3 position, lookAt, upDirection, rightDirection;
         public Vector3 topLeft, topRight, bottomLeft, bottomRight;
         private Vector3 u, v;
-        private float distance, ratio;
+        private float distance;
+        private readonly float ratio;
 
         public float FOV { set { this.distance = this.ratio / (float)Math.Tan(value / 360f * Math.PI);} }
         public Vector3 Position { 

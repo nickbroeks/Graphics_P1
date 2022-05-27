@@ -7,9 +7,9 @@ namespace Template
     {
         private Vector3 normal, nA, nB, nC;
         private Vector3 A, B, C, AB, BC, AC, BA; // vertex positions
-        float d;
+        readonly float d;
         Vector2 uvA, uvB, uvC; // per-vertex texture coordinates
-        float areaABC;
+        readonly float areaABC;
 
         public Triangle(Vector3 A, Vector3 B, Vector3 C, Material material) : base(material)
         {
@@ -75,7 +75,6 @@ namespace Template
             float uP = a * uvA.X + b * uvB.X + g * uvC.X;
             float vP = a * uvA.Y + b * uvB.Y + g * uvC.Y;
             return new Vector2 (uP, vP);
-            //throw new NotImplementedException();
         }
 
         public override Vector3 Normal(Vector3 at, Vector3 from)

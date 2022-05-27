@@ -2,7 +2,7 @@
 
 namespace Template {
     abstract class Primitive {
-        Material material;
+        readonly Material material;
         public const float EPSILON = 0.0001f;
         protected AABB box;
 
