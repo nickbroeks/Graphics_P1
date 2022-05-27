@@ -17,12 +17,12 @@ namespace Template {
             random = new Random();
             objects = new List<Primitive>();
             lights = new List<Light>();
-            objects.Add(new Sphere(new Vector3(5, 0, 5), 2f, Material.Marble));
+            //objects.Add(new Sphere(new Vector3(5, 0, 5), 2f, Material.Marble));
             //objects.Add(new Plane(Vector3.UnitX, 0f, Material.Mirror));
             //objects.Add(new Plane(Vector3.UnitX, 10f, Material.Mirror));
             //objects.Add(new Plane(Vector3.UnitZ, 0f, Material.Mirror));
             //objects.Add(new Plane(Vector3.UnitZ, 10f, Material.Mirror));
-            objects.Add(new Plane(Vector3.UnitY, -5f, Material.Liquid));
+           // objects.Add(new Plane(Vector3.UnitY, -5f, Material.Liquid));
             //objects.Add(new Plane(Vector3.UnitY, 5f, Material.WhitePlastic));
 
 
@@ -36,9 +36,10 @@ namespace Template {
             //objects.Add(new Sphere(new Vector3(0, 0, 1), 0.5f, Color.Blue, Color.White, 100f, Color.Black));
             //objects.Add(new Sphere(new Vector3(2, 0, 2), 0.5f, Material.PurplePlastic));
             //objects.Add(new Sphere(new Vector3(5, -2f, 5), 1f, Material.Marble));
-            lights.Add(new Light(new Vector3(9f, 4f, 9f), new Color(255, 0, 0)));
-            lights.Add(new Light(new Vector3(1f, 4f, 9f), new Color(0, 255, 0)));
-            lights.Add(new Light(new Vector3(5f, 4f, 1f), new Color(0, 0, 255)));
+            //lights.Add(new Light(new Vector3(9f, 4f, 9f), new Color(255, 0, 0)));
+            //lights.Add(new Light(new Vector3(1f, 4f, 9f), new Color(0, 255, 0)));
+            //lights.Add(new Light(new Vector3(5f, 4f, 1f), new Color(0, 0, 255)));
+            objects.Add(new Triangle(new Vector3(4, -2, 4), new Vector3(6, 0, 4), new Vector3(5, 1, 5), Material.GreenPlastic));
             lights.Add(new Light(new Vector3(5f, 5f, 0f), new Color(255)));
             ambient = new Color(60, 60, 60);
         }

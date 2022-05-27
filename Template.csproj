@@ -65,7 +65,7 @@
     <Compile Include="src\Ray.cs" />
     <Compile Include="src\RayTracer.cs" />
     <Compile Include="src\Scene.cs" />
-    <Compile Include="src\Triangle.cs" />
+    <Compile Include="src\Primitives\Triangle.cs" />
     <Compile Include="surface.cs" />
     <Compile Include="template.cs" />
   </ItemGroup>
