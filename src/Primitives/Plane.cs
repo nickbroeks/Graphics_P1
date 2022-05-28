@@ -26,7 +26,7 @@ namespace Template {
         {
             float dot = Vector3.Dot(ray.direction, normal);
             if (dot == 0) return false;
-            float t = -Vector3.Dot(ray.origin - origin, normal) / dot;
+            float t = -Vector3.Dot(ray.Origin - origin, normal) / dot;
             if (EPSILON < t && t < ray.T - EPSILON) {
                 return true;
             }
@@ -36,26 +36,27 @@ namespace Template {
         {
             float dot = Vector3.Dot(ray.direction, normal);
             if (Math.Abs(dot) < EPSILON) return false;
-            float t = -Vector3.Dot(ray.origin - origin, normal) / dot;
+            float t = -Vector3.Dot(ray.Origin - origin, normal) / dot;
             if (t <= EPSILON || t > ray.T) return false;
             ray.T = t;
+            ray.Collider = this;
             return true;
         }
-        public override Vector3 Normal(Vector3 at, Vector3 from)
+        public override Vector3 Normal(Ray ray)
         {
-            if (from.X * normal.X + from.Y * normal.Y + from.Z * normal.Z >= distance) {
+            if (ray.Origin.X * normal.X + ray.Origin.Y * normal.Y + ray.Origin.Z * normal.Z >= distance) {
                 return normal;
             } else { return -normal; }
         }
 
-        public override void Debug(RayTracer rayTracer)
+        public override void Debug(RayTracer rayTracer, int depth)
         {
         }
 
-        public override Vector2 Map(Vector3 point)
+        public override Vector2 Map(Ray ray)
         {
-            float x = Vector3.Dot(point, u) / 20;
-            float y = Vector3.Dot(point, v) / 20;
+            float x = Vector3.Dot(ray.Point, u) / 20;
+            float y = Vector3.Dot(ray.Point, v) / 20;
             if ((x - (int)x + 1) % 1 < 0) {
                 Console.WriteLine("test");
             }
@@ -65,11 +66,6 @@ namespace Template {
         internal override void PreProcess()//Not possible for planes
         {
             
-        }
-
-        public override bool AABBIntersects(Ray ray)
-        {
-            return true;
         }
     }
 }

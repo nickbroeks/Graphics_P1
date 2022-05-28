@@ -90,7 +90,7 @@ namespace Template {
             if (intersection.collider.IsMirror) {
                 if (n == 0) return Color.Black;
                 float angle = Vector3.Dot(intersection.normal, ray.direction);
-                Ray reflect = new Ray(intersection.point, ray.direction - 2 * angle * intersection.normal);
+                Ray reflect = new Ray(intersection.Point, ray.direction - 2 * angle * intersection.normal);
                 return intersection.collider.Ks(intersection.map) * Trace(reflect, debug, n - 1);
             }
             return scene.Illuminate(intersection, ray);
@@ -100,8 +100,8 @@ namespace Template {
             int x = SceneToScreenX(ray.Point.X);
             if (x < 0 || x > screen.width / 2) return;
             int y = SceneToScreenY(ray.Point.Z);
-            int cX = SceneToScreenX(ray.origin.X);
-            int cY = SceneToScreenY(ray.origin.Z); 
+            int cX = SceneToScreenX(ray.Origin.X);
+            int cY = SceneToScreenY(ray.Origin.Z); 
             int nX = SceneToScreenX(ray.Point.X + intersection.normal.X / 5);
             int nY = SceneToScreenY(ray.Point.Z + intersection.normal.Z / 4);
             screen.Line(cX, cY, x, y, Color.Red.value);

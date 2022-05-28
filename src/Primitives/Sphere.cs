@@ -18,24 +18,25 @@ namespace Template {
         public override bool Intersects(Ray ray)
         {
             //if (!AABBIntersects(ray)) return false; //Not really worth it yet
-            Vector3 c = position - ray.origin;
+            Vector3 c = position - ray.Origin;
             float t = Vector3.Dot(c, ray.direction);
             Vector3 q = c + -t * ray.direction;
             float p2 = q.LengthSquared;
             if (p2 > r2) return false;
             t -= (float)Math.Sqrt(r2 - p2);
             if (t > ray.T || t <= EPSILON) return false;
+            ray.Collider = this;
             ray.T = t;
             return true;
         }
 
-        public override Vector3 Normal(Vector3 at, Vector3 from)
+        public override Vector3 Normal(Ray ray)
         {
-            Vector3 normal = at - position;
+            Vector3 normal = ray.Point - position;
             return normal; //TODO: Maybe add inside normals?
         }
 
-        public override void Debug(RayTracer rayTracer)
+        public override void Debug(RayTracer rayTracer, int depth)
         {
             int angles = 360;
             for (int i = 0; i < angles; i++) {
@@ -51,11 +52,12 @@ namespace Template {
                     (float)Math.Sin(degree2) * radius + position.Z);
                 rayTracer.screen.Line(x1, y1, x2, y2, Kd(Vector2.Zero).value);
             }
+            box.Debug(rayTracer, depth);
         }
 
         public override bool ShadowIntersects(Ray ray)
         {
-            Vector3 c = position - ray.origin;
+            Vector3 c = position - ray.Origin;
             float t = Vector3.Dot(c, ray.direction);
             Vector3 q = c - t * ray.direction;
             float p2 = q.LengthSquared;
@@ -65,11 +67,11 @@ namespace Template {
             return false;
         }
 
-        public override Vector2 Map(Vector3 point)
+        public override Vector2 Map(Ray ray)
         {
-            double y = Math.Acos(Math.Min(1, Math.Max(-1,(point.Y - position.Y) / radius))) / (float)(Math.PI);
+            double y = Math.Acos(Math.Min(1, Math.Max(-1,(ray.Point.Y - position.Y) / radius))) / (float)(Math.PI);
             return new Vector2(
-                (float)(Math.Atan2(point.Z - position.Z, point.X - position.X)+Math.PI) / (float)(2*Math.PI),
+                (float)(Math.Atan2(ray.Point.Z - position.Z, ray.Point.X - position.X)+Math.PI) / (float)(2*Math.PI),
                 (float)y
                 
             );
@@ -78,11 +80,6 @@ namespace Template {
         internal override void PreProcess()
         {
             box = new AABB(position - new Vector3(radius), position + new Vector3(radius));
-        }
-
-        public override bool AABBIntersects(Ray ray)
-        {
-            return box.Intersects(ray);
         }
     }
 }

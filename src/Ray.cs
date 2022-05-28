@@ -4,10 +4,12 @@ using OpenTK;
 namespace Template {
     class Ray {
         private static readonly float MAXT = float.MaxValue;
-        public Vector3 origin;
+        private Vector3 origin;
         public Vector3 direction;
+
         private float t;
         private Vector3 point;
+        private Primitive collider;
 
         public Ray(Vector3 origin, Vector3 direction)
         {
@@ -26,8 +28,11 @@ namespace Template {
             get { return point; }
             private set { point = value;}
         }
+        public Vector3 Origin { get { return origin; } }
         public float T { 
             get { return t; } 
             set { t = value; Point = origin + value * direction; } }
+        
+        public Primitive Collider { get { return collider; } set { collider = value; } }
     }
 }

@@ -21,7 +21,7 @@ namespace Template {
             //objects.Add(new Plane(Vector3.UnitX, 10f, Material.Mirror));
             //objects.Add(new Plane(Vector3.UnitZ, 0f, Material.Mirror));
             //objects.Add(new Plane(Vector3.UnitZ, 10f, Material.Mirror));
-            objects.Add(new Plane(Vector3.UnitY, -3.5f, Material.SmallChecker));
+            objects.Add(new Plane(Vector3.UnitY, -4.5f, Material.SmallChecker));
             //objects.Add(new Plane(Vector3.UnitY, 5f, Material.WhitePlastic));
 
 
@@ -34,13 +34,19 @@ namespace Template {
             //objects.Add(new Sphere(new Vector3(-3, 0, 3), 1.5f, Color.Green, Color.White * 0.2f, 4f, Color.Black));
             //objects.Add(new Sphere(new Vector3(0, 0, 1), 0.5f, Color.Blue, Color.White, 100f, Color.Black));
             //objects.Add(new Sphere(new Vector3(2, 0, 2), 0.5f, Material.PurplePlastic));
-            objects.Add(new Sphere(new Vector3(2, -2f, 5), 1.5f, Material.MirrorRed));
-            objects.Add(new Sphere(new Vector3(5, -2f, 5), 1.5f, Material.MirrorGreen));
-            objects.Add(new Sphere(new Vector3(8, -2f, 5), 1.5f, Material.MirrorBlue));
+            objects.Add(new Sphere(new Vector3(2, -3f, 5), 1.5f, Material.MirrorRed));
+            objects.Add(new Sphere(new Vector3(5, -3f, 5), 1.5f, Material.MirrorGreen));
+            objects.Add(new Sphere(new Vector3(8, -3f, 5), 1.5f, Material.MirrorBlue));
             //lights.Add(new Light(new Vector3(9f, 4f, 9f), new Color(255, 0, 0)));
             //lights.Add(new Light(new Vector3(1f, 4f, 9f), new Color(0, 255, 0)));
             //lights.Add(new Light(new Vector3(5f, 4f, 1f), new Color(0, 0, 255)));
-            objects.Add(new Triangle(new Vector3(4, 3, 4), new Vector3(6, 0, 4), new Vector3(5, 1, 5), Material.Metal));
+            //objects.Add(new Triangle(new Vector3(4, -1, 4), new Vector3(6, -1, 4), new Vector3(4, -1, 6), Material.Metal));
+            //objects.Add(new Triangle(new Vector3(6, -1, 6), new Vector3(6, -1, 4), new Vector3(4, -1, 6), Material.Metal));
+            //objects.Add(new Triangle(new Vector3(4, -1, 4), new Vector3(6, -1, 4), new Vector3(5, .5f, 5), Material.Metal));
+            //objects.Add(new Triangle(new Vector3(6, -1, 6), new Vector3(6, -1, 4), new Vector3(5, .5f, 5), Material.Metal));
+            //objects.Add(new Triangle(new Vector3(4, -1, 4), new Vector3(4, -1, 6), new Vector3(5, .5f, 5), Material.Metal));
+            //objects.Add(new Triangle(new Vector3(6, -1, 6), new Vector3(4, -1, 6), new Vector3(5, .5f, 5), Material.Metal));
+            objects.Add(new Pyramid(Material.Metal));
             lights.Add(new Light(new Vector3(5f, 5f, 0f), new Color(255)));
             ambient = new Color(60, 60, 60);
         }
@@ -53,15 +59,15 @@ namespace Template {
                 closest = prim;
             }
             if (closest == null) return null;
-            return new Intersection(ray.T, ray.Point, closest.Normal(ray.Point, ray.origin), closest);
+            return new Intersection(ray, closest.Normal(ray), closest);
         }
         public Color Illuminate(Intersection intSec, Ray primary)
         {
             Primitive collider = intSec.collider;
             Color color = Color.Black;
             foreach (Light light in lights) {
-                float distance = Vector3.Distance(intSec.point, light.Location);
-                Ray ray = new Ray(intSec.point, light.Location - intSec.point, distance);
+                float distance = Vector3.Distance(intSec.Point, light.Location);
+                Ray ray = new Ray(intSec.Point, light.Location - intSec.Point, distance);
                 distance /= 4;
                 if (distance > 15f) { continue; };
                 bool earlyOut = false;
