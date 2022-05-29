@@ -10,7 +10,7 @@ namespace Template {
         public Scene scene;
         public float time;
         private readonly FpsMonitor fpsm;
-        private readonly bool multithread;
+        private readonly bool multithread, antiAliasing;
 
         public RayTracer()
         { 
@@ -18,11 +18,12 @@ namespace Template {
             camera = new Camera(
                 new Vector3(0f, 0f, 0f),
                 new Vector3(1, 0, 1), 80f);
-            screen = new Surface(1200, 600);
+            screen = new Surface(600, 300);
             
             fpsm = new FpsMonitor();
             time = 1.4f;
             scene.PreProcess();
+            antiAliasing = true;
             multithread = true;
         }
 
@@ -65,12 +66,26 @@ namespace Template {
             float cameraY = (float)y / screen.height;
             for (int x = 0; x < screen.width / 2; x++) {
                 bool debug = y == screen.height / 2 && x % 10 == 0;
-
+                
                 float cameraX = (float)x / screen.width * 2;
-                Ray ray = camera.Ray(cameraX, cameraY); //TODO Instead of making 1 ray, make 9
 
-                Color color = Trace(ray, debug, 9); //TODO Calulate 9 colors
-                //TODO Color color = average of 9 colors
+                Color color = Color.Black;
+                if (antiAliasing) {
+                    int n = 9;
+                    Random rnd = new Random();
+                    for (int p = 0; p < n; p++) {
+                        float randomX = (float)rnd.NextDouble() / screen.width * 2;
+                        float randomY = (float)rnd.NextDouble() / screen.height;
+
+                        Ray ray = camera.Ray(cameraX + randomX, cameraY + randomY);
+                        Color newColor = Trace(ray, debug, 5);
+                        color += newColor /n;
+                    }
+                } else {
+                    Ray ray = camera.Ray(cameraX, cameraY);
+                    color = Trace(ray, debug, 5);
+                }
+                               
                 screen.Plot(x + screen.width / 2, y, color.value);
             }
         }

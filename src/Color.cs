@@ -73,6 +73,10 @@ namespace Template {
         {
             return mult * c;
         }
+        public static Color operator /(Color c, int div)
+        {
+            return new Color(c.r / div, c.g / div, c.b / div);
+        }
 
         public static Color operator *(Color left, Color right)
         {
