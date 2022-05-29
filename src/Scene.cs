@@ -21,22 +21,14 @@ namespace Template {
             //objects.Add(new Plane(Vector3.UnitX, 10f, Material.Mirror));
             //objects.Add(new Plane(Vector3.UnitZ, 0f, Material.Mirror));
             //objects.Add(new Plane(Vector3.UnitZ, 10f, Material.Mirror));
-            objects.Add(new Plane(Vector3.UnitY, -4.5f, Material.SmallChecker));
+            objects.Add(new Plane(Vector3.UnitY, -1f, Material.MirrorSmallChecker));
             //objects.Add(new Plane(Vector3.UnitY, 5f, Material.WhitePlastic));
 
-
-            //for (int x = 1; x <= 9; x += 2) {
-            //    for (int z = 1; z <= 9; z += 2) {
-            //        objects.Add(new Sphere(new Vector3(x, -2, z), 0.4f, Material.SmallChecker));
-            //    }
-            //}
-            //objects.Add(new Sphere(new Vector3(2, 0, 4), 1, Color.Purple, new Color(255,0, 155), 250f, Color.Black));
-            //objects.Add(new Sphere(new Vector3(-3, 0, 3), 1.5f, Color.Green, Color.White * 0.2f, 4f, Color.Black));
-            //objects.Add(new Sphere(new Vector3(0, 0, 1), 0.5f, Color.Blue, Color.White, 100f, Color.Black));
-            //objects.Add(new Sphere(new Vector3(2, 0, 2), 0.5f, Material.PurplePlastic));
-            objects.Add(new Sphere(new Vector3(2, -3f, 5), 1.5f, Material.MirrorRed));
-            objects.Add(new Sphere(new Vector3(5, -3f, 5), 1.5f, Material.MirrorGreen));
-            objects.Add(new Sphere(new Vector3(8, -3f, 5), 1.5f, Material.MirrorBlue));
+            objects.Add(new Sphere(new Vector3(2, 0, 5), 1f, Material.MirrorRed));
+            objects.Add(new Sphere(new Vector3(5, 0f, 5), 1f, Material.MirrorGreen));
+            objects.Add(new Sphere(new Vector3(8, 0f, 5), 1f, Material.MirrorBlue));
+            //objects.Add(new Sphere(new Vector3(9, 0f, 8), 1f, Material.PurplePlastic));
+            //objects.Add(new Sphere(new Vector3(8, -3f, 5), 1.5f, Material.GreenPlastic));
             //lights.Add(new Light(new Vector3(9f, 4f, 9f), new Color(255, 0, 0)));
             //lights.Add(new Light(new Vector3(1f, 4f, 9f), new Color(0, 255, 0)));
             //lights.Add(new Light(new Vector3(5f, 4f, 1f), new Color(0, 0, 255)));
@@ -46,9 +38,9 @@ namespace Template {
             //objects.Add(new Triangle(new Vector3(6, -1, 6), new Vector3(6, -1, 4), new Vector3(5, .5f, 5), Material.Metal));
             //objects.Add(new Triangle(new Vector3(4, -1, 4), new Vector3(4, -1, 6), new Vector3(5, .5f, 5), Material.Metal));
             //objects.Add(new Triangle(new Vector3(6, -1, 6), new Vector3(4, -1, 6), new Vector3(5, .5f, 5), Material.Metal));
-            objects.Add(new Pyramid(Material.Metal));
-            lights.Add(new Light(new Vector3(5f, 5f, 0f), new Color(255)));
-            ambient = new Color(60, 60, 60);
+            //objects.Add(new Pyramid(Material.Metal));
+            lights.Add(new Light(new Vector3(5f, 5f, 8f), new Color(255)));
+            ambient = new Color(30, 30, 30);
         }
 
         public Intersection? Intersect(Ray ray)
@@ -79,14 +71,22 @@ namespace Template {
                 }
                 if (earlyOut) continue;
                 float angle = Vector3.Dot(intSec.normal, ray.direction);
-                color += 1 / (float)Math.Pow(distance, 2) *
-                light.Intensity * (
-                    intSec.Kd * Math.Max(0, angle)
-                     + intSec.Ks * (float)Math.Pow(Math.Max(0, Vector3.Dot(
-                        primary.direction,
-                        ray.direction - 2 * angle * intSec.normal
-                    )), intSec.N)
-                );
+                if (collider.IsMirror) {
+                    color += 1 / (float)Math.Pow(distance, 2) *
+                    light.Intensity * (
+                        intSec.Kd * Math.Max(0, angle)
+                    );
+                } else {
+                    color += 1 / (float)Math.Pow(distance, 2) *
+                    light.Intensity * (
+                        intSec.Kd * Math.Max(0, angle)
+                         + intSec.Ks * (float)Math.Pow(Math.Max(0, Vector3.Dot(
+                            primary.direction,
+                            ray.direction - 2 * angle * intSec.normal
+                        )), intSec.N)
+                    );
+                }
+                
             }
             return color + intSec.Ka * ambient;
         }

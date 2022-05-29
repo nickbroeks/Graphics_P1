@@ -10,22 +10,20 @@ namespace Template {
         public Scene scene;
         public float time;
         private readonly FpsMonitor fpsm;
-        private readonly bool multithread, rotate;
+        private readonly bool multithread;
 
         public RayTracer()
         { 
             scene = new Scene();
             camera = new Camera(
-                new Vector3(1f, 4f, 5f),
-                new Vector3(2, -3, -3),
-                Vector3.UnitY, 80f);
-            screen = new Surface(800, 400);
+                new Vector3(0f, 0f, 0f),
+                new Vector3(1, 0, 1), 80f);
+            screen = new Surface(1200, 600);
             
             fpsm = new FpsMonitor();
             time = 1.4f;
             scene.PreProcess();
             multithread = true;
-            rotate = true;
         }
 
         public void Debug()
@@ -52,16 +50,12 @@ namespace Template {
         public int SceneToScreenY(float y) { return (int)((screen.height - 1) * (y) / 11); }
         public float ScreenToSceneX(int x) { return x * 22f / (screen.width - 1); }
         public float ScreenToSceneY(int y) { return y * 11f / (screen.height - 1); }
+
         public void Render()
         {
             fpsm.Update();
             screen.Clear(0);
-            if (rotate) {
-                time += 0.04f;
-                camera.Position = 6f * new Vector3(-(float)Math.Cos(time), 0, -(float)Math.Sin(time)) + new Vector3(5, 0, 5);
-                camera.LookAt = new Vector3((float)Math.Cos(time), 0, (float)Math.Sin(time));
-            }
-            
+
             if (multithread) Parallel.For(0, screen.height, y => { RenderRow(y); });
             else for (int y = 0; y < screen.height; y++) { RenderRow(y); }
             Debug();
@@ -73,9 +67,9 @@ namespace Template {
                 bool debug = y == screen.height / 2 && x % 10 == 0;
 
                 float cameraX = (float)x / screen.width * 2;
-                Ray ray = camera.Ray(cameraX, cameraY);//TODO Instead of making 1 ray, make 9
+                Ray ray = camera.Ray(cameraX, cameraY); //TODO Instead of making 1 ray, make 9
 
-                Color color = Trace(ray, debug, 5); //TODO Calulate 9 colors
+                Color color = Trace(ray, debug, 9); //TODO Calulate 9 colors
                 //TODO Color color = average of 9 colors
                 screen.Plot(x + screen.width / 2, y, color.value);
             }
@@ -91,7 +85,7 @@ namespace Template {
                 if (n == 0) return Color.Black;
                 float angle = Vector3.Dot(intersection.normal, ray.direction);
                 Ray reflect = new Ray(intersection.Point, ray.direction - 2 * angle * intersection.normal);
-                return intersection.collider.Ks(intersection.map) * Trace(reflect, debug, n - 1);
+                return scene.Illuminate(intersection, ray) + intersection.collider.Ks(intersection.map) * Trace(reflect, debug, n - 1);
             }
             return scene.Illuminate(intersection, ray);
         }

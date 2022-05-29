@@ -9,12 +9,16 @@ namespace Template{
         private float distance;
         private readonly float ratio;
 
-        public float FOV { set { this.distance = this.ratio / (float)Math.Tan(value / 360f * Math.PI);} }
+        public float FOV {
+            set {
+                this.distance = this.ratio / (float)Math.Tan(value / 360f * Math.PI);
+                UpdateScreen();
+            }
+        }
         public Vector3 Position { 
             get { return position; } 
             set { 
                 position = value;
-                this.rightDirection = Vector3.Cross(this.upDirection, this.lookAt);
                 UpdateScreen();
             } 
         }
@@ -23,17 +27,24 @@ namespace Template{
             get { return lookAt; }
             set
             {
-                lookAt = value;
-                this.rightDirection = Vector3.Cross(this.upDirection, this.lookAt);
+                lookAt = value.Normalized();
+                
+                this.upDirection = Vector3.Cross(new Vector3(1, 0, 0), this.lookAt).Normalized();
+                this.upDirection = Vector3.UnitY;
+                this.rightDirection = Vector3.Cross(this.lookAt, this.upDirection).Normalized();
                 UpdateScreen();
             }
         }
-        public Camera(Vector3 position, Vector3 lookAt, Vector3 upDirection, float fov = 90f)
+        public Vector3 UpDirection
+        {
+            get { return upDirection; }
+        }
+        public Camera(Vector3 position, Vector3 lookAt, float fov = 90f)
         {
             this.position = position;
             this.lookAt = lookAt.Normalized();
-            this.upDirection = upDirection.Normalized();
-            this.rightDirection = Vector3.Cross(this.upDirection, this.lookAt);
+            this.upDirection = Vector3.Cross(new Vector3(0, 0, 1), this.lookAt).Normalized();
+            this.rightDirection = Vector3.Cross(this.lookAt, this.upDirection).Normalized();
             this.ratio = 1f;
             FOV = fov;
 

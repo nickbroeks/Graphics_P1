@@ -2,6 +2,7 @@
 using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 
 // The template provides you with a window which displays a 'linear frame buffer', i.e.
 // a 1D array of pixels that represents the graphical contents of the window.
@@ -57,8 +58,10 @@ namespace Template
 		protected override void OnUpdateFrame( FrameEventArgs e )
 		{
 			// called once per frame; app logic
-			var keyboard = OpenTK.Input.Keyboard.GetState();
+			KeyboardState keyboard = Keyboard.GetState();
+			MouseState mouse = Mouse.GetState();
 			if( keyboard[OpenTK.Input.Key.Escape] ) terminated = true;
+			app.HandleInput(keyboard, mouse);
 		}
 		protected override void OnRenderFrame( FrameEventArgs e )
 		{
