@@ -10,7 +10,8 @@ namespace Template {
         public Scene scene;
         public float time;
         private readonly FpsMonitor fpsm;
-        private readonly bool multithread, antiAliasing;
+        private readonly bool multithread;
+        private readonly int antiAliasing;
 
         public RayTracer()
         { 
@@ -23,7 +24,7 @@ namespace Template {
             fpsm = new FpsMonitor();
             time = 1.4f;
             scene.PreProcess();
-            antiAliasing = true;
+            antiAliasing = 1;
             multithread = true;
         }
 
@@ -70,16 +71,15 @@ namespace Template {
                 float cameraX = (float)x / screen.width * 2;
 
                 Color color = Color.Black;
-                if (antiAliasing) {
-                    int n = 9;
+                if (antiAliasing > 1) {
                     Random rnd = new Random();
-                    for (int p = 0; p < n; p++) {
+                    for (int p = 0; p < antiAliasing; p++) {
                         float randomX = (float)rnd.NextDouble() / screen.width * 2;
                         float randomY = (float)rnd.NextDouble() / screen.height;
 
                         Ray ray = camera.Ray(cameraX + randomX, cameraY + randomY);
                         Color newColor = Trace(ray, debug, 5);
-                        color += newColor /n;
+                        color += newColor / antiAliasing;
                     }
                 } else {
                     Ray ray = camera.Ray(cameraX, cameraY);
