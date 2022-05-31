@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Template {
-    struct Color {
+    struct Color {//Helper class to return and manipulate colors
         public static readonly Color Red;
         public static readonly Color Green;
         public static readonly Color Blue;

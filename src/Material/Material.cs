@@ -2,6 +2,7 @@
 using System;
 
 namespace Template {
+    //Abstract class to hold a materials like Images, PLain colors or generated Textures
     abstract class Material {
         public static Material GreenPlastic;
         public static Material PurplePlastic;
@@ -53,7 +54,7 @@ namespace Template {
                 }
                 return Color.White;
             }, true);
-            Mirror = new Plain(Color.White, new Color(200, 200, 200), 0, Color.White, true);
+            Mirror = new Plain(new Color(0), new Color(255), 0, new Color(10), true) ;
             MirrorRed = new Plain(Color.Red, new Color(200), 0, Color.Red, true);
             MirrorGreen = new Plain(Color.Green, new Color(200), 0, Color.Green, true);
             MirrorBlue = new Plain(Color.Blue, new Color(200), 0, Color.Blue, true);

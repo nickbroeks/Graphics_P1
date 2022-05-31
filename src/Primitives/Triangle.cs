@@ -8,7 +8,7 @@ namespace Template
         private Vector3 normal, nA, nB, nC;
         private Vector3 A, B, C, AB, BC, AC, BA; // vertex positions
         readonly float d;
-        Vector2 uvA, uvB, uvC; // per-vertex texture coordinates
+        public Vector2 uvA, uvB, uvC; // per-vertex texture coordinates
         readonly float areaABC;
 
         public Triangle(Vector3 A, Vector3 B, Vector3 C, Material material) : base(material)
@@ -16,14 +16,17 @@ namespace Template
             this.A = A;
             this.B = B;
             this.C = C;
-            this.uvA = Vector2.UnitX;
+            //Default values for texturing triangles
+            this.uvA = Vector2.UnitX; 
             this.uvB = Vector2.Zero;
             this.uvC = Vector2.UnitY;
+
             AB = B - A;
             BA = A - B;
             AC = C - A;
             BC = C - B;
             normal = Vector3.Cross(AB, AC).Normalized();
+            //Default values for normal vectors is the normal of the vector
             nA = normal;
             nB = normal;
             nC = normal;
@@ -105,7 +108,6 @@ namespace Template
             if (ray.Origin.X * normal.X + ray.Origin.Y * normal.Y + ray.Origin.Z * normal.Z >= d) {
                 return result;
             } else { return -result; }
-            //throw new NotImplementedException();
         }
 
         public override bool ShadowIntersects(Ray ray)

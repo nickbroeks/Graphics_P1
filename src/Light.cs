@@ -18,7 +18,7 @@ namespace Template {
         {
             int x = rayTracer.SceneToScreenX(location.X);
             int y = rayTracer.SceneToScreenX(location.Z);
-            rayTracer.screen.Box(x-1, y-1, x, y, intensity.value);
+            rayTracer.screen.Box(x-2, y-2, x, y, intensity.value);
         }
     }
 }

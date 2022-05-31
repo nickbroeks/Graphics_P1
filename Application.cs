@@ -4,25 +4,35 @@ using System;
 
 namespace Template
 {
+	/// <summary>
+	/// This class connects the logic from the input, the raytracer and the screen object together.
+	/// </summary>
 	class Application
 	{
 		RayTracer rayTracer;
 		public Surface screen;
 		private float lastWheelPrecise;
 		private float usedWheelPrecise;
-		// initialize
+		/// <summary>
+		/// Method called once to initialise the application
+		/// </summary>
 		public void Init()
 		{
 			rayTracer = new RayTracer();
 			screen = rayTracer.screen;
 		}
-		// tick: renders one frame
+		/// <summary>
+		/// Method that get's called once per frame used for setting the pixel values
+		/// </summary>
 		public void Tick()
 		{
-			
 			rayTracer.Render();
 		}
-
+		/// <summary>
+		/// Method that gets the input values and passes the used values to the raytracer
+		/// </summary>
+		/// <param name="keyboard">The current keyboard state</param>
+		/// <param name="mouse">The current mouse state</param>
 		public void HandleInput(KeyboardState keyboard, MouseState mouse)
 		{
 			float angle = 0.04f;
@@ -54,7 +64,8 @@ namespace Template
 			}
 			if (lastWheelPrecise != mouse.WheelPrecise) {
 				usedWheelPrecise += Math.Min(mouse.WheelPrecise - lastWheelPrecise, 5);
-				usedWheelPrecise = Math.Min(79, Math.Max(-70, usedWheelPrecise));
+				//Keep the usedWheelprecies between 75 and -70, so the FOV will be between 5 and 150
+				usedWheelPrecise = Math.Min(75, Math.Max(-70, usedWheelPrecise)); 
 				rayTracer.camera.FOV = 80-usedWheelPrecise;
 				lastWheelPrecise = mouse.WheelPrecise;
             }

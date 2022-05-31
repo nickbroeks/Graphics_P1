@@ -8,24 +8,21 @@ namespace Template {
         public Surface screen;
         public Camera camera;
         public Scene scene;
-        public float time;
         private readonly FpsMonitor fpsm;
-        private readonly bool multithread;
-        private readonly int antiAliasing;
+        private readonly bool multithread = true;
+        //Adjust this value change the amount of samples taken. 1 means no antialising
+        private readonly int antiAliasing = 1; 
 
         public RayTracer()
         { 
             scene = new Scene();
             camera = new Camera(
-                new Vector3(0f, 0f, 0f),
+                new Vector3(0.5f, 0f, 0.5f),
                 new Vector3(1, 0, 1), 80f);
-            screen = new Surface(600, 300);
+            screen = new Surface(800, 400);
             
             fpsm = new FpsMonitor();
-            time = 1.4f;
-            scene.PreProcess();
-            antiAliasing = 1;
-            multithread = true;
+            scene.PreProcess(); // Initialise the AABB's
         }
 
         public void Debug()
@@ -46,6 +43,9 @@ namespace Template {
             foreach (Primitive obj in scene.objects) {
                 obj.Debug(this);
             }
+            foreach (Light obj in scene.lights) {
+                obj.Debug(this);
+            }
 
         }
         public int SceneToScreenX(float x) { return (int)((screen.width - 1) * (x) / 22); }
@@ -57,39 +57,42 @@ namespace Template {
         {
             fpsm.Update();
             screen.Clear(0);
-
+            Debug();
             if (multithread) Parallel.For(0, screen.height, y => { RenderRow(y); });
             else for (int y = 0; y < screen.height; y++) { RenderRow(y); }
-            Debug();
+            
         }
+        //Render one row of the image
         public void RenderRow(int y)
         {
             float cameraY = (float)y / screen.height;
+            Random rnd = new Random();
             for (int x = 0; x < screen.width / 2; x++) {
-                bool debug = y == screen.height / 2 && x % 10 == 0;
+                bool shoudlBeDebugged = y == screen.height / 2 && x % 10 == 0;
                 
                 float cameraX = (float)x / screen.width * 2;
 
                 Color color = Color.Black;
                 if (antiAliasing > 1) {
-                    Random rnd = new Random();
+                   
                     for (int p = 0; p < antiAliasing; p++) {
                         float randomX = (float)rnd.NextDouble() / screen.width * 2;
                         float randomY = (float)rnd.NextDouble() / screen.height;
 
                         Ray ray = camera.Ray(cameraX + randomX, cameraY + randomY);
-                        Color newColor = Trace(ray, debug, 5);
+                        Color newColor = Trace(ray, shoudlBeDebugged, 5);
                         color += newColor / antiAliasing;
                     }
                 } else {
                     Ray ray = camera.Ray(cameraX, cameraY);
-                    color = Trace(ray, debug, 5);
+                    color = Trace(ray, shoudlBeDebugged, 5);
                 }
                                
                 screen.Plot(x + screen.width / 2, y, color.value);
             }
         }
         
+        //Recursively find the correct color to be displayed
         public Color Trace(Ray ray, bool debug, int n)
         {
             Intersection? i = scene.Intersect(ray);
@@ -100,10 +103,11 @@ namespace Template {
                 if (n == 0) return Color.Black;
                 float angle = Vector3.Dot(intersection.normal, ray.direction);
                 Ray reflect = new Ray(intersection.Point, ray.direction - 2 * angle * intersection.normal);
-                return scene.Illuminate(intersection, ray) + intersection.collider.Ks(intersection.map) * Trace(reflect, debug, n - 1);
+                return scene.Illuminate(intersection) + intersection.collider.Ks(intersection.map) * Trace(reflect, debug, n - 1);
             }
-            return scene.Illuminate(intersection, ray);
+            return scene.Illuminate(intersection);
         }
+        ///display the given ray on the debug screen
         private void DebugRay(Ray ray, Intersection intersection)
         {
             int x = SceneToScreenX(ray.Point.X);

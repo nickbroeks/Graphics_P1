@@ -2,6 +2,9 @@
 using OpenTK;
 
 namespace Template {
+    /// <summary>
+    /// Class that represent a ray, shot from an origin into a direction. It also keeps track of the closest point
+    /// </summary>
     class Ray {
         private static readonly float MAXT = float.MaxValue;
         private Vector3 origin;
